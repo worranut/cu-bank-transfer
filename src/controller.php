@@ -13,7 +13,7 @@ if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
     
     $transferAction = new TransferAction($srcNumber,$targetNumber,$amount);
     
-    echo json_encode($transfer->doTransfer());
+    echo json_encode($transferAction->doTransfer());
 }
 
 if($_GET['accNo']) {

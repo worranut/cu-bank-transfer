@@ -155,6 +155,7 @@
                 $("#accName").text(data.accountName);
                 $("#accBalance").text(commaSeparateNumber(data.accountBalance));
             });*/
+
             var accSrcNo = '<?php echo $this->accNumber;?>';
             var accName = '<?php echo $this->accName;?>';
             $("#accSrcNo").data("accNo",<?php echo $this->accNumber;?>);
@@ -173,7 +174,6 @@
                         targetNumber: $("#accDesNo").val(),
                         amount: $("#amount").val()
                     }
-
                 })
                 .done(function(data) {
                     console.log(data);
