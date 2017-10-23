@@ -141,7 +141,7 @@
 
     <script type="text/javascript">
         $( document ).ready(function() {
-            $.ajax({
+            /*$.ajax({
                 method: "GET",
                 url: "/src/controller.php",
                 dataType: "json",
@@ -154,7 +154,13 @@
                 $("#accSrcNo").text(data.accountNumber.replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/,'$1-$2-$3-$4'));
                 $("#accName").text(data.accountName);
                 $("#accBalance").text(commaSeparateNumber(data.accountBalance));
-            });
+            });*/
+            var accSrcNo = '<?php echo $this->accNumber;?>';
+            var accName = '<?php echo $this->accName;?>';
+            $("#accSrcNo").data("accNo",<?php echo $this->accNumber;?>);
+            $("#accSrcNo").text(accSrcNo.toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/,'$1-$2-$3-$4'));
+            $("#accName").text(accName.toString());
+            $("#accBalance").text(commaSeparateNumber(<?php echo $this->amount;?>));
         });
 
         $("#transferForm").submit(function(event) {

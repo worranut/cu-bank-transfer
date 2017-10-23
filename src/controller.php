@@ -3,6 +3,7 @@
 require_once "../vendor/autoload.php";
 
 use Transfer\Transfer;
+use Transfer\TransferAction;
 use Transfer\Outputs;
 
 if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
@@ -10,7 +11,7 @@ if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
     $targetNumber = $_POST['targetNumber'];
     $amount = $_POST['amount'];
     
-    $transfer = new Transfer($srcNumber,$targetNumber,$amount);
+    $transferAction = new TransferAction($srcNumber,$targetNumber,$amount);
     
     echo json_encode($transfer->doTransfer());
 }

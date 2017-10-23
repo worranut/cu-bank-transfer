@@ -2,28 +2,16 @@
 
 use Transfer\Outputs;
 
-class Transfer{
-    private $srcNumber,$targetNumber,$amount;
+class Transfer {
+    private $accNumber,$accName,$amount;
 
-    public function __construct(string $srcNumber,string $targetNumber,int $amount){
-        $this->srcNumber = $srcNumber;
-        $this->targetNumber = $targetNumber;
+    public function __construct(string $accNumber,string $accName,int $amount){
+        $this->accNumber = $accNumber;
+        $this->accName = $accName;
         $this->amount = $amount;
     }
 
-    public function doTransfer(): Outputs { 
-        $output = new Outputs();
-        $output->accountNumber = $this->srcNumber;
-
-        return $output;
+    public function showView() {
+        include 'view/transfer.php';
     }
-
-    public function getDeposit(): array { 
-        
-    }
-
-    public function getWithdrawal(): array { 
-        
-    }
-
 }
