@@ -12,6 +12,7 @@ class Transfer {
     }
 
     public function showView() {
-        include 'view/transfer.php';
+        $viewName = 'view/transfer.php';
+        include $viewName;
     }
 }

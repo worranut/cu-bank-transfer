@@ -18,12 +18,4 @@ class TransferAction {
         return $output;
     }
 
-    public function getDeposit(): array { 
-        
-    }
-
-    public function getWithdrawal(): array { 
-        
-    }
-
 }
