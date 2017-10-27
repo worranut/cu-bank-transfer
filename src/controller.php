@@ -6,12 +6,13 @@ use Transfer\Transfer;
 use Transfer\TransferAction;
 use Transfer\Outputs;
 
-if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
+if($_POST['srcNumber'] && $_POST['srcName'] && $_POST['targetNumber'] && $_POST['amount']) {
     $srcNumber = $_POST['srcNumber'];
+    $srcName = $_POST['srcName'];
     $targetNumber = $_POST['targetNumber'];
     $amount = $_POST['amount'];
     
-    $transferAction = new TransferAction($srcNumber,$targetNumber,$amount);
+    $transferAction = new TransferAction($srcNumber,$srcName,$targetNumber,$amount);
     
     echo json_encode($transferAction->doTransfer());
 }

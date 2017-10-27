@@ -171,6 +171,7 @@
                     dataType: "json",
                     data: {
                         srcNumber: $("#accSrcNo").data("accNo"),
+                        srcName: $("#accName").text();
                         targetNumber: $("#accDesNo").val(),
                         amount: $("#amount").val()
                     }

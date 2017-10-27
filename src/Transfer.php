@@ -3,12 +3,12 @@
 use Transfer\Outputs;
 
 class Transfer {
-    private $accNumber,$accName,$amount;
+    private $accNumber,$accName,$accBalance;
 
-    public function __construct(string $accNumber,string $accName,int $amount){
+    public function __construct(string $accNumber,string $accName,int $accBalance){
         $this->accNumber = $accNumber;
         $this->accName = $accName;
-        $this->amount = $amount;
+        $this->accBalance = $accBalance;
     }
 
     public function showView() {
