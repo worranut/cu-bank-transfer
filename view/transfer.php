@@ -161,7 +161,7 @@
             $("#accSrcNo").data("accNo",<?php echo $this->accNumber;?>);
             $("#accSrcNo").text(accSrcNo.toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/,'$1-$2-$3-$4'));
             $("#accName").text(accName.toString());
-            $("#accBalance").text(commaSeparateNumber(<?php echo $this->amount;?>));
+            $("#accBalance").text(commaSeparateNumber(<?php echo $this->accBalance;?>));
         });
 
         $("#transferForm").submit(function(event) {
@@ -171,18 +171,28 @@
                     dataType: "json",
                     data: {
                         srcNumber: $("#accSrcNo").data("accNo"),
-                        srcName: $("#accName").text();
+                        srcName: $("#accName").text(),
                         targetNumber: $("#accDesNo").val(),
                         amount: $("#amount").val()
                     }
                 })
                 .done(function(data) {
                     console.log(data);
-                    swal(
-                        'โอนเงินเรียบร้อย',
-                        'ยอดเงินคงเหลือ = ' + data.accountBalance + " บาท",
-                        'success'
-                    );
+                    if(data.errorMessage) {
+                        swal(
+                            'ผิดพลาด',
+                            data.errorMessage,
+                            'error'
+                            );
+                    } else {
+                        swal(
+                            'โอนเงินเรียบร้อย',
+                            'ยอดเงินคงเหลือ = ' + commaSeparateNumber(data.accountBalance) + " บาท",
+                            'success'
+                        );
+                        $("#accDesNo").val('');
+                        $("#amount").val('');
+                    }
                 });
             event.preventDefault();
         });

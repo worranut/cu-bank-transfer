@@ -1,18 +1,36 @@
 <?php namespace Transfer;
 
 use Transfer\Outputs;
+use Transfer\WithdrawalStub;
+use Transfer\DepositStub;
 
 class Transfer {
-    private $accNumber,$accName,$accBalance;
+    private $srcNumber,$srcName;
 
-    public function __construct(string $accNumber,string $accName,int $accBalance){
-        $this->accNumber = $accNumber;
-        $this->accName = $accName;
-        $this->accBalance = $accBalance;
+    public function __construct(string $srcNumber,string $srcName){
+        $this->srcNumber = $srcNumber;
+        $this->srcName = $srcName;
     }
 
-    public function showView() {
-        $viewName = 'view/transfer.php';
-        include $viewName;
+    public function doTransfer(string $desNumber,int $amount): Outputs {
+        $output = new Outputs();
+        $output->sourceAccountNumber = $this->srcNumber;
+        $output->accountName = $this->srcName;
+
+        $withdrawalStub = new WithdrawalStub();
+        $wOutput = $withdrawalStub->withdraw($this->srcNumber,$amount);
+        if($wOutput->errorMessage == null) {
+            $output->accountBalance = $wOutput->accountBalance;
+
+            $depositStub = new DepositStub();
+            $dOutput = $depositStub->deposit($desNumber,$amount);
+            if($dOutput->errorMessage != null) {
+                $output->errorMessage = $dOutput->errorMessage;
+            }
+        } else {
+            $output->errorMessage = $wOutput->errorMessage;
+        }
+        return $output;
     }
+
 }
