@@ -5,25 +5,23 @@ use Transfer\WithdrawalStub;
 use Transfer\DepositStub;
 
 class Transfer {
-    private $srcNumber,$srcName;
+    private $srcNumber;
 
-    public function __construct(string $srcNumber,string $srcName){
+    public function __construct(string $srcNumber){
         $this->srcNumber = $srcNumber;
-        $this->srcName = $srcName;
     }
 
     public function doTransfer(string $desNumber,int $amount): Outputs {
         $output = new Outputs();
         $output->sourceAccountNumber = $this->srcNumber;
-        $output->accountName = $this->srcName;
 
-        $withdrawalStub = new WithdrawalStub();
-        $wOutput = $withdrawalStub->withdraw($this->srcNumber,$amount);
+        $withdrawalStub = new WithdrawalStub($this->srcNumber);
+        $wOutput = $withdrawalStub->withdraw($amount);
         if($wOutput->errorMessage == null) {
             $output->accountBalance = $wOutput->accountBalance;
 
-            $depositStub = new DepositStub();
-            $dOutput = $depositStub->deposit($desNumber,$amount);
+            $depositStub = new DepositStub($desNumber);
+            $dOutput = $depositStub->deposit($amount);
             if($dOutput->errorMessage != null) {
                 $output->errorMessage = $dOutput->errorMessage;
             }

@@ -11,7 +11,7 @@ if($_POST['srcNumber'] && $_POST['srcName'] && $_POST['targetNumber'] && $_POST[
     $targetNumber = $_POST['targetNumber'];
     $amount = $_POST['amount'];
     
-    $transfer = new Transfer($srcNumber,$srcName);
+    $transfer = new Transfer($srcNumber);
     
     echo json_encode($transfer->doTransfer($targetNumber,$amount));
 }
