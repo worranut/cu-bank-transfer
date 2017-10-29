@@ -9,12 +9,15 @@ final class WithdrawalStub {
         $output = new Outputs();
         $output->accountNumber = $accNumber;
         $output->accountName = "Test";
-        if($accountBalance - $amount >= 0) {
-            $output->accountBalance = $accountBalance - $amount;
+        if($amount <= 0) {
+            $output->errorMessage = "จำนวนเงินไม่ถูกต้อง กรุณาตรวจสอบ";
         } else {
-            $output->errorMessage = "ยอดเงินในบัญชีไม่เพียงพอ";
+            if($accountBalance - $amount >= 0) {
+                $output->accountBalance = $accountBalance - $amount;
+            } else {
+                $output->errorMessage = "ยอดเงินในบัญชีไม่เพียงพอ";
+            }
         }
-        
         return $output;
     }
 }

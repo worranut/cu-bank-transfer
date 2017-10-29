@@ -30,4 +30,52 @@ final class TransferTest extends TestCase {
         $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
     }
 
+    function testMinusAmountForWithdraw() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111','Test');
+        $tOutput = $transfer->doTransfer('1234567890',-1);
+        $result->errorMessage = "จำนวนเงินไม่ถูกต้อง กรุณาตรวจสอบ";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
+    function testZeroAmountForWithdraw() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111','Test');
+        $tOutput = $transfer->doTransfer('1234567890',0);
+        $result->errorMessage = "จำนวนเงินไม่ถูกต้อง กรุณาตรวจสอบ";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
+    function testMaxAmountForWithdraw() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111','Test');
+        $tOutput = $transfer->doTransfer('1234567890',20000);
+        $result->accountBalance = 0;
+        $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
+    }
+
+    function testNormAmountForWithdraw() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111','Test');
+        $tOutput = $transfer->doTransfer('1234567890',10000);
+        $result->accountBalance = 10000;
+        $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
+    }
+
+    function testMaxOverAmountForWithdraw() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111','Test');
+        $tOutput = $transfer->doTransfer('1234567890',20001);
+        $result->errorMessage = "ยอดเงินในบัญชีไม่เพียงพอ";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
+    function testAmountWithStringForWithdraw() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111','Test');
+        $tOutput = $transfer->doTransfer('1234567890',"asd");
+        $result->errorMessage = "จำนวนเงินไม่ถูกต้อง กรุณาตรวจสอบ";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
 }
