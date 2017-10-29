@@ -73,9 +73,10 @@ final class TransferTest extends TestCase {
     function testAmountWithStringForWithdraw() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111','Test');
-        $tOutput = $transfer->doTransfer('1234567890',"asd");
-        $result->errorMessage = "จำนวนเงินไม่ถูกต้อง กรุณาตรวจสอบ";
-        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+        try {
+            $tOutput = $transfer->doTransfer('1234567890',"aa");
+        } catch (TypeError $e) {
+        }
     }
 
 }
