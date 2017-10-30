@@ -5,7 +5,15 @@ use Transfer\WithdrawalStub;
 use Transfer\DepositStub;
 
 class Transfer {
-    private $srcNumber;
+    private $srcNumber, $accountBalance = 20000;
+
+    public function getAccountBalance(): int {
+        return $this->accountBalance;
+    }
+
+    public function setAccountBalance(int $accountBalance) {
+        $this->accountBalance = $accountBalance;
+    }
 
     public function __construct(string $srcNumber){
         $this->srcNumber = $srcNumber;
@@ -19,6 +27,7 @@ class Transfer {
         $wOutput = $withdrawalStub->withdraw($amount);
         if($wOutput->errorMessage == null) {
             $output->accountBalance = $wOutput->accountBalance;
+            $this->setAccountBalance($wOutput->accountBalance);
 
             $depositStub = new DepositStub($desNumber);
             $dOutput = $depositStub->deposit($amount);

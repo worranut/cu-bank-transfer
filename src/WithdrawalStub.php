@@ -3,7 +3,7 @@
 use Transfer\Outputs;
 
 final class WithdrawalStub {
-    private $accNumber;
+    private $accNumber,$accountBalance;
 
     public function __construct(string $accNumber){
         $this->accNumber = $accNumber;
@@ -24,5 +24,9 @@ final class WithdrawalStub {
             }
         }
         return $output;
+    }
+    
+    public function getAccountBalance(): int {
+        return $this->accountBalance;
     }
 }

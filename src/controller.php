@@ -5,9 +5,8 @@ require_once "../vendor/autoload.php";
 use Transfer\Transfer;
 use Transfer\Outputs;
 
-if($_POST['srcNumber'] && $_POST['srcName'] && $_POST['targetNumber'] && $_POST['amount']) {
+if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
     $srcNumber = $_POST['srcNumber'];
-    $srcName = $_POST['srcName'];
     $targetNumber = $_POST['targetNumber'];
     $amount = $_POST['amount'];
     

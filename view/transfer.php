@@ -91,10 +91,10 @@
                             </div>
                             <div class="card-body">
                                 <p>โอนเงินจากบัญชีหมายเลข :
-                                    <span class="pink"><span id="accSrcNo">accNo</span> (<span id="accName">accName</span>)</span>
+                                    <span class="pink"><span id="accSrcNo">accNo</span> <!--(<span id="accName">accName</span>)--></span>
                                 </p>
-                                <p>ยอดเงินคงเหลือ:
-                                    <span id="accBalance" class="pink">accBalance</span> บาท</p>
+                                <!--<p>ยอดเงินคงเหลือ:
+                                    <span id="accBalance" class="pink">accBalance</span> บาท</p>-->
                                 <p>ไปยัง</p>
                                 <form id="transferForm" class="form-horizontal">
                                     <div class="form-group row">
@@ -160,18 +160,29 @@
             var accName = '<?php echo $this->accName;?>';
             $("#accSrcNo").data("accNo",<?php echo $this->accNumber;?>);
             $("#accSrcNo").text(accSrcNo.toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/,'$1-$2-$3-$4'));
-            $("#accName").text(accName.toString());
-            $("#accBalance").text(commaSeparateNumber(<?php echo $this->accBalance;?>));
+            /*$("#accName").text(accName.toString());
+            $("#accBalance").text(commaSeparateNumber(<?php echo $this->accBalance;?>));*/
         });
 
         $("#transferForm").submit(function(event) {
+            swal({
+                title: 'โอนเงิน',
+                text: "โอนเงินจากบัญชี " +  $("#accSrcNo").data("accNo").toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/, '$1-$2-$3-$4') 
+                        + " (" + $("#accName").text() + ") ไปยังบัญชี "
+                        + $("#accDesNo").val().toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/, '$1-$2-$3-$4') 
+                        +" เป็นจำนวนเงิน " + commaSeparateNumber($("#amount").val()) + " บาท",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก'
+            }).then(function () {
             $.ajax({
                     method: "POST",
                     url: "/src/controller.php",
                     dataType: "json",
                     data: {
                         srcNumber: $("#accSrcNo").data("accNo"),
-                        srcName: $("#accName").text(),
+                        /*srcName: $("#accName").text(),*/
                         targetNumber: $("#accDesNo").val(),
                         amount: $("#amount").val()
                     }
@@ -192,8 +203,10 @@
                         );
                         $("#accDesNo").val('');
                         $("#amount").val('');
+                        $("#accBalance").text(commaSeparateNumber(data.accountBalance));
                     }
                 });
+            });
             event.preventDefault();
         });
 

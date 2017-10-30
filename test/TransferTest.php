@@ -10,7 +10,7 @@ final class TransferTest extends TestCase {
         $result = new Outputs();
         $transfer = new Transfer('1111111111','Test');
         $tOutput = $transfer->doTransfer('1234567890',5000);
-        $result->accountBalance = 15000;
+        $result->accountBalance = $transfer->getAccountBalance();
         $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
     }
 
@@ -50,7 +50,7 @@ final class TransferTest extends TestCase {
         $result = new Outputs();
         $transfer = new Transfer('1111111111','Test');
         $tOutput = $transfer->doTransfer('1234567890',20000);
-        $result->accountBalance = 0;
+        $result->accountBalance = $transfer->getAccountBalance();
         $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
     }
 
@@ -58,7 +58,7 @@ final class TransferTest extends TestCase {
         $result = new Outputs();
         $transfer = new Transfer('1111111111','Test');
         $tOutput = $transfer->doTransfer('1234567890',10000);
-        $result->accountBalance = 10000;
+        $result->accountBalance = $transfer->getAccountBalance();
         $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
     }
 
@@ -68,15 +68,6 @@ final class TransferTest extends TestCase {
         $tOutput = $transfer->doTransfer('1234567890',20001);
         $result->errorMessage = "ยอดเงินในบัญชีไม่เพียงพอ";
         $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
-    }
-
-    function testAmountWithStringForWithdraw() {
-        $result = new Outputs();
-        $transfer = new Transfer('1111111111','Test');
-        try {
-            $tOutput = $transfer->doTransfer('1234567890',"aa");
-        } catch (TypeError $e) {
-        }
     }
 
 }
