@@ -5,7 +5,7 @@ require_once "../vendor/autoload.php";
 use Transfer\Transfer;
 use Transfer\Outputs;
 
-if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
+if(isset($_POST['srcNumber']) && $_POST['targetNumber'] && $_POST['amount']) {
     $srcNumber = $_POST['srcNumber'];
     $targetNumber = $_POST['targetNumber'];
     $amount = $_POST['amount'];
@@ -15,7 +15,7 @@ if($_POST['srcNumber'] && $_POST['targetNumber'] && $_POST['amount']) {
     echo json_encode($transfer->doTransfer($targetNumber,$amount));
 }
 
-if($_GET['accNo']) {
+if(isset($_GET['accNo'])) {
     $output = new Outputs();
     $output->accountNumber = "1234567890";
     $output->accountName = "test name";
