@@ -1,43 +1,42 @@
-<?php namespace Transfer;
+<?php namespace Operation;
 
-use Transfer\Outputs;
-use Transfer\WithdrawalStub;
-use Transfer\DepositStub;
+use Output\Outputs;
+require_once __DIR__.'./../src/Outputs.php';
 
 class Transfer {
-    private $srcNumber, $accountBalance = 20000;
-
-    public function getAccountBalance(): int {
-        return $this->accountBalance;
-    }
-
-    public function setAccountBalance(int $accountBalance) {
-        $this->accountBalance = $accountBalance;
-    }
-
-    public function __construct(string $srcNumber){
-        $this->srcNumber = $srcNumber;
-    }
-
-    public function doTransfer(string $desNumber,int $amount): Outputs {
-        $output = new Outputs();
-        $output->sourceAccountNumber = $this->srcNumber;
-
-        $withdrawalStub = new WithdrawalStub($this->srcNumber);
-        $wOutput = $withdrawalStub->withdraw($amount);
-        if($wOutput->errorMessage == null) {
-            $output->accountBalance = $wOutput->accountBalance;
-            $this->setAccountBalance($wOutput->accountBalance);
-
-            $depositStub = new DepositStub($desNumber);
-            $dOutput = $depositStub->deposit($amount);
-            if($dOutput->errorMessage != null) {
-                $output->errorMessage = $dOutput->errorMessage;
-            }
-        } else {
-            $output->errorMessage = $wOutput->errorMessage;
+    private $srcNumber,$withdrawal,$deposit;
+    
+        public function __construct(string $srcNumber,$withdrawal,$deposit){
+            $this->srcNumber = $srcNumber;
+            $this->withdrawal = new $withdrawal($srcNumber);
+            $this->deposit = $deposit;
         }
-        return $output;
-    }
+    
+        public function doTransfer(string $desNumber,int $amount): Outputs {
+            $output = new Outputs();
+            $output->sourceAccountNumber = $this->srcNumber;
+    
+            $wOutput = $this->withdrawal->withdraw($amount);
+            if($wOutput->errorMessage == null) {
+                $output->accountBalance = $wOutput->accountBalance;
+                
+                $this->deposit = new $this->deposit($desNumber);
+                $dOutput = $this->deposit->deposit($amount);
+                if($dOutput->errorMessage != null) {
+                    $output->errorMessage = $dOutput->errorMessage;
+                }
+            } else {
+                $output->errorMessage = $wOutput->errorMessage;
+            }
+            return $output;
+        }
+
+        public function setWithdrawal($withdrawal) {
+            $this->withdrawal = new $withdrawal($this->srcNumber);
+        }
+
+        public function setDeposit($deposit) {
+            $this->deposit = $deposit;
+        }
 
 }

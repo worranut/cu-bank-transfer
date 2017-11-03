@@ -1,7 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Transfer\Outputs;
+use Output\Outputs;
+
+require_once __DIR__.'./../src/Outputs.php';
 
 final class OutputsTest extends TestCase {
     function testAssignValueToAccountNumber() {

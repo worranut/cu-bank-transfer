@@ -1,10 +1,10 @@
 <?php namespace MainDriver;
 
-use Transfer\TransferView;
+use Operation\TransferView;
 
 final class MainDriver {
-    public function transfer(string $accNumber,string $accName,int $accBalance): void { 
-        $transfer = new TransferView($accNumber, $accName, $accBalance);
-        $transfer->showView();
+    public function transfer(string $srcNumber,string $targetNumber,int $amount): void {
+        $transfer = new Transfer($srcNumber,Withdrawal::class,DepositService::class);
+    	$transfer->doTransfer($targetNumber,$amount);
     }
 }

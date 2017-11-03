@@ -2,23 +2,20 @@
 
 require_once "../vendor/autoload.php";
 
-use Transfer\Transfer;
-use Transfer\Outputs;
+use Operation\Transfer;
+use Operation\WithdrawalStub;
+use Operation\DepositStub;
+require_once __DIR__.'./../src/Transfer.php';
+require_once __DIR__.'./../src/WithdrawalStub.php';
+require_once __DIR__.'./../src/DepositStub.php';
 
-if(isset($_POST['srcNumber']) && $_POST['targetNumber'] && $_POST['amount']) {
-    $srcNumber = $_POST['srcNumber'];
-    $targetNumber = $_POST['targetNumber'];
-    $amount = $_POST['amount'];
-    
-    $transfer = new Transfer($srcNumber);
-    
-    echo json_encode($transfer->doTransfer($targetNumber,$amount));
+$service = $_POST["service"];
+
+if ($service == "Transfer"){
+  $transaction = $_POST["transaction"];
+  if(isset($transaction["srcNumber"]) && $transaction["targetNumber"] && $transaction["amount"]) {
+      $transfer = new Transfer($transaction["srcNumber"],WithdrawalStub::class,DepositStub::class);
+      echo json_encode($transfer->doTransfer($transaction["targetNumber"],$transaction["amount"]));
+  }
 }
 
-if(isset($_GET['accNo'])) {
-    $output = new Outputs();
-    $output->accountNumber = "1234567890";
-    $output->accountName = "test name";
-    $output->accountBalance = 20000;
-    echo json_encode($output);
-}

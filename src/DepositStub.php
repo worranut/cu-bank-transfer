@@ -1,6 +1,6 @@
-<?php namespace Transfer;
+<?php namespace Operation;
 
-use Transfer\Outputs;
+use Output\Outputs;
 
 final class DepositStub {
     private $accNumber;
