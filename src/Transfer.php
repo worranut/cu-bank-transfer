@@ -14,19 +14,22 @@ class Transfer {
     
         public function doTransfer(string $desNumber,int $amount): Outputs {
             $output = new Outputs();
-            $output->sourceAccountNumber = $this->srcNumber;
     
-            $wOutput = $this->withdrawal->withdraw($amount);
-            if($wOutput->errorMessage == null) {
-                $output->accountBalance = $wOutput->accountBalance;
-                
-                $this->deposit = new $this->deposit($desNumber);
-                $dOutput = $this->deposit->deposit($amount);
-                if($dOutput->errorMessage != null) {
-                    $output->errorMessage = $dOutput->errorMessage;
-                }
+            if($this->srcNumber == $desNumber) {
+                $output->errorMessage = "บัญชีที่เลือกไม่สามารถเป็นบัญชีรับโอนได้";
             } else {
-                $output->errorMessage = $wOutput->errorMessage;
+                $wOutput = $this->withdrawal->withdraw($amount);
+                if($wOutput->errorMessage == null) {
+                    $output->accountBalance = $wOutput->accountBalance;
+                    
+                    $this->deposit = new $this->deposit($desNumber);
+                    $dOutput = $this->deposit->deposit($amount);
+                    if($dOutput->errorMessage != null) {
+                        $output->errorMessage = $dOutput->errorMessage;
+                    }
+                } else {
+                    $output->errorMessage = $wOutput->errorMessage;
+                }
             }
             return $output;
         }

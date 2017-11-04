@@ -37,6 +37,14 @@ final class TransferTest extends TestCase {
         $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
     }
 
+    function testOwnAccount() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1111111111',5000);
+        $result->errorMessage = "บัญชีที่เลือกไม่สามารถเป็นบัญชีรับโอนได้";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
     function testMinusAmountForWithdraw() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);

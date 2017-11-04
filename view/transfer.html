@@ -184,7 +184,7 @@
             swal({
                 title: 'โอนเงิน',
                 text: "โอนเงินจากบัญชี " + $("#accSrcNo").data("accNo").toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/, '$1-$2-$3-$4') +
-                    " (" /*+ $("#accName").text() */ + ") ไปยังบัญชี " +
+                    " " /*+ $("#accName").text() */ + " ไปยังบัญชี " +
                     $("#accDesNo").val().toString().replace(/(\d{1})\-?(\d{3})\-?(\d{3})\-?(\d{3})/, '$1-$2-$3-$4') +
                     " เป็นจำนวนเงิน " + commaSeparateNumber($("#amount").val()) + " บาท",
                 type: 'info',

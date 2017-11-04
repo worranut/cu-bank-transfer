@@ -1,10 +1,12 @@
 <?php namespace MainDriver;
 
 use Operation\TransferView;
+use Operation\Withdrawal;
+use Operation\DepositService;
 
 final class MainDriver {
-    public function transfer(string $srcNumber,string $targetNumber,int $amount): void {
+    public function transfer(string $srcNumber,string $desNumber,int $amount): void {
         $transfer = new Transfer($srcNumber,Withdrawal::class,DepositService::class);
-    	$transfer->doTransfer($targetNumber,$amount);
+    	$transfer->doTransfer($desNumber,$amount);
     }
 }
