@@ -10,13 +10,16 @@ final class WithdrawalStub {
     }
     
     public function withdraw(int $amount): Outputs { 
-        $accountBalance = 20000;
+        $accountBalance = 2000000;
         $output = new Outputs();
         $output->accountNumber = $this->accNumber;
         $output->accountName = "Test";
         if($amount <= 0) {
             $output->errorMessage = "จำนวนเงินไม่ถูกต้อง กรุณาตรวจสอบ";
-        } else {
+        } else if ($amount > 100000) {
+            $output->errorMessage = "ไม่สามารถโอนเงินเกิน 100,000 บาท";
+        }
+        else {
             if($accountBalance - $amount >= 0) {
                 $output->accountBalance = $accountBalance - $amount;
             } else {
