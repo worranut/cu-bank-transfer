@@ -12,7 +12,7 @@ class Transfer {
             $this->deposit = $deposit;
         }
     
-        public function doTransfer(string $desNumber,int $amount): Outputs {
+        public function doTransfer(string $desNumber,string $amount): Outputs {
             $output = new Outputs();
     
             if($this->srcNumber == $desNumber) {

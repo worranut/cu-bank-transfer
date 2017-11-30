@@ -9,7 +9,7 @@ final class DepositStub {
         $this->accNumber = $accNumber;
     }
 
-    public function deposit(int $amount): Outputs { 
+    public function deposit(string $amount): Outputs { 
         $mockAccNumber = "1234567890";
         $output = new Outputs();
         if($mockAccNumber == $this->accNumber) {

@@ -13,39 +13,7 @@ require_once __DIR__.'./../src/DepositStub.php';
 
 final class TransferTest extends TestCase {
 
-    function testTransferSuccess() {
-        $result = new Outputs();
-        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('1234567890',5000);
-        $result->accountBalance = 15000;
-        $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
-    }
-
-    function testBalanceCannotWithdraw() {
-        $result = new Outputs();
-        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('1234567890',50000);
-        $result->errorMessage = "ยอดเงินในบัญชีไม่เพียงพอ";
-        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
-    }
-
-    function testDestinationNumberNotFoundInDatabase() {
-        $result = new Outputs();
-        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('2222222222',5000);
-        $result->errorMessage = "ไม่พบหมายเลขบัญชีนี้ภายในระบบ CU Bank";
-        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
-    }
-
-    function testOwnAccount() {
-        $result = new Outputs();
-        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('1111111111',5000);
-        $result->errorMessage = "บัญชีที่เลือกไม่สามารถเป็นบัญชีรับโอนได้";
-        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
-    }
-
-    function testMinusAmountForWithdraw() {
+    function testTransferMinus() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
         $tOutput = $transfer->doTransfer('1234567890',-1);
@@ -53,7 +21,7 @@ final class TransferTest extends TestCase {
         $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
     }
 
-    function testZeroAmountForWithdraw() {
+    function testTransferZero() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
         $tOutput = $transfer->doTransfer('1234567890',0);
@@ -61,28 +29,83 @@ final class TransferTest extends TestCase {
         $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
     }
 
-    function testMaxAmountForWithdraw() {
+    function testTransferOne() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('1234567890',20000);
-        $result->accountBalance = 0;
+        $tOutput = $transfer->doTransfer('1234567890',1);
+        $result->accountBalance = 1999999;
         $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
     }
 
-    function testNormAmountForWithdraw() {
+    function testTransferTwo() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('1234567890',10000);
-        $result->accountBalance = 10000;
+        $tOutput = $transfer->doTransfer('1234567890',2);
+        $result->accountBalance = 1999998;
         $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
     }
 
-    function testMaxOverAmountForWithdraw() {
+    function testTransferHalf() {
         $result = new Outputs();
         $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
-        $tOutput = $transfer->doTransfer('1234567890',20001);
-        $result->errorMessage = "ยอดเงินในบัญชีไม่เพียงพอ";
+        $tOutput = $transfer->doTransfer('1234567890',50000);
+        $result->accountBalance = 1950000;
+        $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
+    }
+
+    function testTransferMaxMinus() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1234567890',99999);
+        $result->accountBalance = 1900001;
+        $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
+    }
+
+    function testTransferMax() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1234567890',100000);
+        $result->accountBalance = 1900000;
+        $this->assertEquals($tOutput->accountBalance, $result->accountBalance);
+    }
+
+    function testTransferMaxOver() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1234567890',100001);
+        $result->errorMessage = "จำนวนเงินถอนในแต่ละครั้งต้องไม่เกิน 100,000 บาท";
         $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
     }
 
+    function testDestinationNumberNotFoundInDatabase() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('2222222222',50000);
+        $result->errorMessage = "ไม่พบหมายเลขบัญชีนี้ภายในระบบ CU Bank";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
+    function testOwnAccount() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1111111111',50000);
+        $result->errorMessage = "บัญชีที่เลือกไม่สามารถเป็นบัญชีรับโอนได้";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
+    function testTransferString() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1234567890','500A');
+        $result->errorMessage = "จำนวนเงินที่ต้องการถอนต้องเป็นตัวเลขเท่านั้น";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
+
+    function testTransferFloat() {
+        $result = new Outputs();
+        $transfer = new Transfer('1111111111',WithdrawalStub::class,DepositStub::class);
+        $tOutput = $transfer->doTransfer('1234567890',500.50);
+        $result->errorMessage = "จำนวนเงินที่ต้องการถอนต้องเป็นตัวเลขจำนวนเต็มที่มีค่ามากกว่า 0 เท่านั้น";
+        $this->assertEquals($tOutput->errorMessage, $result->errorMessage);
+    }
 }
